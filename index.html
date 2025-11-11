@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="请我的暄暄小朋友接受礼物">
+  <meta property="og:description" content="送给暄暄的特别礼物">
+  <title>请我的暄暄小朋友接受礼物</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            sweet1: '#F9A8D4',
+            sweet2: '#C084FC',
+            sweet3: '#F472B6',
+          },
+          fontFamily: {
+            cute: ['"Comic Sans MS"', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+  
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .btn-gradient {
+        background: linear-gradient(135deg, #C084FC 0%, #F472B6 100%);
+        box-shadow: 0 10px 25px -5px rgba(244, 114, 182, 0.5), 0 8px 10px -6px rgba(192, 132, 252, 0.3);
+        transition: all 0.3s ease;
+      }
+      .btn-gradient:hover {
+        box-shadow: 0 15px 30px -5px rgba(244, 114, 182, 0.7), 0 10px 15px -6px rgba(192, 132, 252, 0.5);
+        transform: translateY(-3px);
+      }
+      .danmu {
+        position: absolute;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        z-index: 10;
+        animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        opacity: 0;
+        transform: scale(0);
+        min-width: 180px;
+        max-width: 80%;
+      }
+      .danmu-header {
+        background: linear-gradient(135deg, #C084FC 0%, #F472B6 100%);
+        padding: 0.3rem 0.8rem;
+        border-radius: 8px 8px 0 0;
+        display: flex;
+        align-items: center;
+        gap: 0.3rem;
+      }
+      .danmu-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: white;
+      }
+      .danmu-title {
+        color: white;
+        font-size: 0.8rem;
+        font-weight: bold;
+        flex: 1;
+        text-align: center;
+      }
+      .danmu-content {
+        padding: clamp(0.5rem, 2vw, 0.8rem) clamp(0.8rem, 3vw, 1.2rem);
+        color: #333;
+        font-family: 'Comic Sans MS', sans-serif;
+        font-size: clamp(0.8rem, 2.5vw, 1rem);
+        text-align: center;
+        white-space: normal;
+        word-wrap: break-word;
+      }
+      @keyframes popIn {
+        0% { opacity: 0; transform: scale(0); }
+        70% { transform: scale(1.1); }
+        100% { opacity: 1; transform: scale(1); }
+      }
+      .big-danmu {
+        font-size: clamp(1rem, 3.5vw, 1.6rem) !important;
+        font-weight: bold;
+        padding: clamp(0.6rem, 2.5vw, 0.9rem) clamp(1rem, 4vw, 1.8rem);
+        z-index: 15;
+      }
+      .bg-heart {
+        position: absolute;
+        color: rgba(255, 255, 255, 0.6);
+        font-size: clamp(0.375rem, 1.5vw, 1.125rem);
+        animation: floatHeart 6s linear infinite;
+        opacity: 0;
+      }
+      @keyframes floatHeart {
+        0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+        10% { opacity: 0.6; }
+        90% { opacity: 0.6; }
+        100% { transform: translateY(-20vh) rotate(360deg); opacity: 0; }
+      }
+      .bg-star {
+        position: absolute;
+        background-color: rgba(255, 255, 255, 0.9);
+        border-radius: 50%;
+        width: 1px;
+        height: 1px;
+        box-shadow: 0 0 1px 0.5px rgba(255, 255, 255, 0.7);
+        animation: twinkle 2.5s ease-in-out infinite;
+      }
+      @keyframes twinkle {
+        0%, 100% { opacity: 0.3; transform: scale(0.8); }
+        50% { opacity: 1; transform: scale(1.5); }
+      }
+      .bg-bubble {
+        position: absolute;
+        border: 2px solid rgba(255, 255, 255, 0.5);
+        border-radius: 50%;
+        animation: riseBubble 8s linear infinite;
+        opacity: 0;
+      }
+      @keyframes riseBubble {
+        0% { transform: translateY(100vh) scale(0.5); opacity: 0; }
+        10% { opacity: 0.5; }
+        90% { opacity: 0.5; }
+        100% { transform: translateY(-20vh) scale(1.2); opacity: 0; }
+      }
+      /* 立体爱心粒子效果 */
+      .particle-heart {
+        position: absolute;
+        color: rgba(244, 114, 182, 0.8);
+        font-size: clamp(0.5rem, 2vw, 1.5rem);
+        transform-origin: center;
+        animation: float3DHeart var(--duration, 8s) var(--easing, ease-in-out) var(--delay, 0s) infinite;
+        filter: drop-shadow(0 0 10px rgba(244, 114, 182, 0.7));
+        opacity: var(--opacity, 0.8);
+      }
+      @keyframes float3DHeart {
+        0%, 100% {
+          transform: translateY(0) translateX(0) rotate(0deg) scale(1);
+          opacity: 0;
+        }
+        10%, 90% {
+          opacity: var(--opacity, 0.8);
+        }
+        25% {
+          transform: translateY(calc(var(--height, -10vh))) translateX(calc(var(--x-offset, 5vw) * var(--direction, 1))) rotate(calc(var(--rotation, 30deg) * var(--direction, 1))) scale(var(--scale, 1.2));
+        }
+        75% {
+          transform: translateY(calc(var(--height, -10vh) * 0.7)) translateX(calc(var(--x-offset, 5vw) * var(--direction, 1) * -1)) rotate(calc(var(--rotation, 30deg) * var(--direction, 1) * -1)) scale(var(--scale, 1.1));
+        }
+      }
+      /* 爱心GIF容器样式 */
+      .heart-container {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 1;
+      }
+      .heart-container img {
+        width: clamp(200px, 65vw, 450px);
+        height: auto;
+        filter: drop-shadow(0 0 30px #ff69b4);
+        animation: heartbeat 2s ease-in-out infinite;
+      }
+      /* 文字粒子样式 */
+      .text-particle {
+        position: absolute;
+        pointer-events: none;
+        opacity: 0;
+        will-change: transform, opacity;
+        font-family: 'Microsoft YaHei', sans-serif;
+        font-weight: bold;
+        z-index: 2;
+      }
+      @keyframes heartbeat {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.5); }
+      }
+      @keyframes firework {
+        0% {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+        100% {
+          opacity: 0;
+          transform: translateY(-100vh) scale(0.3);
+        }
+      }
+    }
+  </style>
+</head>
+
+<body class="bg-black min-h-screen overflow-hidden">
+  <div id="start" class="w-full h-screen relative p-4 overflow-hidden bg-black">
+    <!-- 星星背景容器 -->
+    <div id="stars-container" class="absolute inset-0 z-0"></div>
+    
+    <!-- 粒子背景容器 -->
+    <div id="particle-container" class="absolute inset-0 z-0"></div>
+    
+    <!-- 中央爱心效果 - 添加错误处理 -->
+      <div id="center-heart" class="heart-container absolute z-10">
+        <img src="https://pic.imgdb.cn/item/642547f5a682492fcc15cd5d.gif" alt="爱心" onerror="this.onerror=null; this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cGF0aCBmaWxsPSIjZmY2OWI0IiBmaWxsLW9wYWNpdHk9IjAuOSIgZD0iTTUyIDM1IEMzOCAzNSAzMCA0MyAyNiA1NS41QzIyIDQzIDE0IDM1IDAgMzUgQzAgMzUgMTcgNDcgMjUgNjJDMzMgNzcgNDYgOTIgNTIgOTJDNTggOTIgNzEgNzcgNzkgNjJDODcgNDcgNzMgMzUgNTIgMzVaIj48L3BhdGg+PC9zdmc+';" />
+      </div>
+    
+    <!-- 按钮位置调整到爱心下方 -->
+    <button id="open" class="absolute bottom-[clamp(20vh,30vh,25vh)] left-1/2 transform -translate-x-1/2 z-20 
+      btn-gradient text-white 
+      text-[clamp(0.75rem,2.5vw,1.1rem)] 
+      px-[clamp(1.5rem,6vw,3rem)] 
+      py-[clamp(0.8rem,3vw,1.5rem)] 
+      rounded-full hover:scale-105 transition-all font-cute">
+      请我的暄暄小朋友接受礼物
+    </button>
+    
+    <!-- 背景音乐元素 - 添加crossorigin支持 -->
+    <audio id="backgroundMusic" loop crossorigin="anonymous">
+      <source src="2.m4a" type="audio/mp4">
+    </audio>
+    <!-- 长按播放的音乐元素 - 添加crossorigin支持 -->
+    <audio id="heartMusic" loop crossorigin="anonymous">
+      <source src="5.m4a" type="audio/mp4">
+    </audio>
+    
+    <!-- 长按提示框 -->
+    <div id="heartTip" class="absolute top-1/3 left-1/2 transform -translate-x-1/2 bg-white/80 backdrop-blur-sm px-4 py-2 rounded-lg text-pink-600 font-cute text-sm hidden z-20 shadow-lg">
+      长按爱心播放音乐 ❤️
+    </div>
+  </div>
+  
+  <div id="main" class="w-full h-screen 
+    bg-gradient-to-br from-sweet2/90 to-sweet1/90 
+    hidden relative overflow-hidden">
+    <div id="bg-decor" class="absolute inset-0"></div>
+    <div id="danmu-container" class="absolute inset-0"></div>
+  </div>
+
+  <script>
+    // 设备性能检测
+    let isLowEndDevice = false;
+    // 检测设备性能，低端设备降低动画复杂度
+    function checkDevicePerformance() {
+      // 检测内存和CPU
+      const memory = navigator.deviceMemory || 4;
+      const cores = navigator.hardwareConcurrency || 4;
+      const isMobile = window.innerWidth < 768;
+      const isSlowMobile = isMobile && (memory < 3 || cores < 4);
+      
+      isLowEndDevice = isSlowMobile || 
+                     (performance && performance.memory && performance.memory.jsHeapSizeLimit < 1073741824);
+      
+      if (isLowEndDevice) {
+        console.log('检测到低端设备，降低动画复杂度');
+      }
+    }
+    
+    checkDevicePerformance();
+    
+    const texts = [
+      "暄暄老婆万圣节快乐",
+      "老婆奖励我一个亲亲",
+      "老婆辛苦啦早点休息",
+      "老婆你还有我呢不要再伤害自己了",
+      "老婆我们马上就要见面啦",
+      "祝老婆学业顺利",
+      "暄暄老婆冬至快乐"
+    ];
+    
+    const colors = [
+      '#F472B6', '#EC4899', '#C084FC', '#A78BFA', 
+      '#F9A8D4', '#FB7185', '#F43F5E', '#8B5CF6'
+    ];
+    
+    let danmuTimer = null; // 弹幕循环定时器，用于后续清除
+    
+    window.onload = () => {
+      init();
+      
+      // 点按爱心播放音乐功能
+      const heartContainer = document.getElementById('center-heart');
+      const heartMusic = document.getElementById('heartMusic');
+      const heartTip = document.getElementById('heartTip');
+      let isHeartMusicPlaying = false;
+      let audioSupported = true;
+      
+      // 更新提示框文本
+      if (heartTip) {
+        heartTip.textContent = '点击爱心播放音乐 ❤️';
+      }
+      
+      // 显示提示框
+      heartContainer.addEventListener('mouseenter', () => {
+        if (heartTip) {
+          heartTip.classList.remove('hidden');
+        }
+      });
+      
+      // 隐藏提示框
+      heartContainer.addEventListener('mouseleave', () => {
+        if (heartTip) {
+          heartTip.classList.add('hidden');
+        }
+      });
+      
+      // 添加点击事件播放音乐
+      const playHeartMusic = () => {
+        if (!isHeartMusicPlaying && audioSupported) {
+          heartMusic.play().catch(error => {
+            console.log('播放音乐失败:', error);
+            // 如果第一次播放失败，禁用音频功能以避免后续错误
+            if (!isHeartMusicPlaying) {
+              audioSupported = false;
+              // 可选：提示用户音频无法播放
+              if (heartTip) {
+                heartTip.textContent = '音频无法播放，继续欣赏动画吧 ❤️';
+                setTimeout(() => {
+                  if (heartTip) heartTip.textContent = '点击爱心播放音乐 ❤️';
+                }, 3000);
+              }
+            }
+          });
+          isHeartMusicPlaying = true;
+        }
+      };
+      
+      // 鼠标点击事件
+      heartContainer.addEventListener('click', playHeartMusic);
+      
+      // 触摸点击事件
+      heartContainer.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        playHeartMusic();
+      });
+      
+      document.getElementById('open').addEventListener('click', () => {
+      document.getElementById('start').classList.add('hidden');
+      const mainPage = document.getElementById('main');
+      mainPage.classList.remove('hidden');
+      createSweetBg();
+      startLoopDanmus(); // 启动弹幕循环生成
+      
+      // 停止爱心音乐
+      if (isHeartMusicPlaying) {
+        heartMusic.pause();
+        heartMusic.currentTime = 0;
+        isHeartMusicPlaying = false;
+      }
+      
+      // 播放背景音乐
+      if (audioSupported) {
+        const music = document.getElementById('backgroundMusic');
+        music.play().catch(error => {
+          console.log('背景音乐播放失败:', error);
+          // 禁用音频功能以避免后续错误
+          audioSupported = false;
+        });
+      }
+    });
+      
+      // 页面切换回开始页时，清除定时器（避免后台生成）
+      window.addEventListener('visibilitychange', () => {
+        if (document.hidden && danmuTimer) {
+          clearInterval(danmuTimer);
+          danmuTimer = null;
+        } else if (!document.hidden && !danmuTimer && !document.getElementById('main').classList.contains('hidden')) {
+          startLoopDanmus();
+        }
+      });
+    };
+    
+    // FireworkSystem类 - 实现文字粒子发射效果
+    class FireworkSystem {
+      constructor() {
+        this.particles = [];
+        this.texts = ['我爱你 暄暄', '请我的暄暄小朋友接受礼物', '我永远爱你', '你是我的唯一'];
+        this.colors = ['#87CEFA', '#B0E0E6', '#ADD8E6', '#AFEEEE', '#F472B6', '#EC4899'];
+        this.init();
+      }
+
+      init() {
+        // 根据设备性能调整粒子池大小
+        const poolSize = isLowEndDevice ? 100 : 200;
+        this.createPool(poolSize);
+        this.startLaunch();
+        this.setupClick();
+      }
+
+      createPool(size) {
+        const container = document.createElement('div');
+        for (let i = 0; i < size; i++) {
+          const p = document.createElement('div');
+          p.className = 'text-particle';
+          p.style.display = 'none';
+          container.appendChild(p);
+        }
+        document.body.appendChild(container);
+        this.pool = [...container.children];
+      }
+
+      getParticle() {
+        return this.pool.find(p => p.style.display === 'none');
+      }
+
+      launch() {
+        const particle = this.getParticle();
+        if (!particle) return;
+
+        // 粒子样式设置
+        particle.textContent = this.texts[Math.floor(Math.random() * this.texts.length)];
+        particle.style.color = this.colors[Math.floor(Math.random() * this.colors.length)];
+        // 根据设备性能调整字体大小，减少渲染负担
+        const fontSize = isLowEndDevice ? `${14 + Math.random() * 8}px` : `${18 + Math.random() * 12}px`;
+        particle.style.fontSize = fontSize;
+        particle.style.display = 'block';
+        particle.style.opacity = '1';
+
+        // 动画参数
+        const startX = window.innerWidth * 0.5;
+        const startY = window.innerHeight + 50;
+        const angle = (Math.PI/2) + (Math.random() - 0.5) * Math.PI/2;
+        // 低端设备缩短距离，减少计算量
+        const distance = isLowEndDevice ? 300 + Math.random() * 200 : 500 + Math.random() * 300;
+        // 低端设备加快动画速度
+        const duration = isLowEndDevice ? 2 + Math.random() * 1.5 : 3 + Math.random() * 2;
+
+        // 设置初始位置
+        particle.style.transform = `translate(${startX}px, ${startY}px)`;
+
+        // 创建动画
+        const animation = particle.animate([
+          { 
+            transform: `translate(${startX}px, ${startY}px) scale(1)`,
+            opacity: 1
+          },
+          {
+            transform: `translate(${startX + Math.cos(angle) * distance}px, 
+                       ${startY - Math.abs(Math.sin(angle) * distance * 1.5)}px) scale(0.5)`,
+            opacity: 0
+          }
+        ], {
+          duration: duration * 1000,
+          easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)'
+        });
+
+        animation.onfinish = () => {
+          particle.style.display = 'none';
+        };
+      }
+
+      startLaunch() {
+        // 控制发射频率，避免低端设备性能问题
+        const interval = isLowEndDevice ? 200 : 100;
+        let lastLaunchTime = 0;
+        
+        const launch = (timestamp) => {
+          if (!lastLaunchTime || timestamp - lastLaunchTime > interval) {
+            this.launch();
+            lastLaunchTime = timestamp;
+          }
+          requestAnimationFrame(launch);
+        };
+        requestAnimationFrame(launch);
+      }
+
+      setupClick() {
+        let lastClick = 0;
+        document.addEventListener('click', (e) => {
+          const now = Date.now();
+          if (now - lastClick > 200) {
+            // 根据设备性能调整点击时发射的粒子数量
+            const particleCount = isLowEndDevice ? 15 : 30;
+            for (let i = 0; i < particleCount; i++) {
+              setTimeout(() => this.launch(), i * 50);
+            }
+            lastClick = now;
+          }
+        });
+      }
+    }
+    
+    function createStartDecor() {
+      // 创建星星背景
+      createStarsBackground();
+      // 创建立体爱心粒子背景
+      createParticleHearts();
+    }
+    
+    function createStarsBackground() {
+      const container = document.getElementById('stars-container');
+      // 根据设备性能调整星星数量
+      let starCount = window.innerWidth < 768 ? 300 : 500; // 默认数量大幅增加
+      if (isLowEndDevice) {
+        starCount = window.innerWidth < 768 ? 100 : 200; // 低端设备也增加星星数
+      }
+      
+      for (let i = 0; i < starCount; i++) {
+        const star = document.createElement('i');
+        
+        // 随机大小
+        const size = Math.random() * 2 + 1;
+        
+        // 随机位置
+        const left = Math.random() * 100;
+        const top = Math.random() * 100;
+        
+        // 随机动画延迟
+        const delay = Math.random() * 3;
+        
+        // 随机不透明度
+        const opacity = Math.random() * 0.8 + 0.2;
+        
+        // 设置样式
+        star.className = 'bg-star';
+        star.style.width = `${size * 0.5}px`;
+        star.style.height = `${size * 0.5}px`;
+        star.style.left = `${left}%`;
+        star.style.top = `${top}%`;
+        star.style.opacity = opacity;
+        star.style.animation = `twinkle ${Math.random() * 2 + 1}s ease-in-out ${delay}s infinite`;
+        
+        container.appendChild(star);
+      }
+    }
+    
+    function createParticleHearts() {
+      const container = document.getElementById('particle-container');
+      // 根据设备性能调整粒子数量，大幅增加数量
+      let count = window.innerWidth < 768 ? 200 : 300; // 大幅增加默认数量
+      if (isLowEndDevice) {
+        count = window.innerWidth < 768 ? 100 : 150; // 低端设备也大幅增加粒子数
+      }
+      
+      for (let i = 0; i < count; i++) {
+        const heart = document.createElement('i');
+        heart.className = 'fa fa-heart particle-heart';
+        
+        // 随机位置
+        heart.style.left = `${Math.random() * 100}%`;
+        heart.style.top = `${Math.random() * 100}%`;
+        
+        // 随机动画参数，减慢速度
+        const duration = 4 + Math.random() * 6; // 4-10秒，减慢移动速度
+        const height = -20 - Math.random() * 40; // 减少垂直移动距离
+        const xOffset = 5 + Math.random() * 15; // 减少水平移动距离
+        const rotation = 20 + Math.random() * 40; // 减少旋转角度
+        const scale = 0.8 + Math.random() * 0.6; // 保持不变
+        const opacity = 0.4 + Math.random() * 0.6; // 保持不变
+        const delay = Math.random() * 3; // 0-3秒延迟，减慢生成速度
+        const direction = Math.random() > 0.5 ? 1 : -1; // 方向
+        
+        // 设置CSS变量
+        heart.style.setProperty('--duration', `${duration}s`);
+        heart.style.setProperty('--height', `${height}vh`);
+        heart.style.setProperty('--x-offset', `${xOffset}vw`);
+        heart.style.setProperty('--rotation', `${rotation}deg`);
+        heart.style.setProperty('--scale', scale);
+        heart.style.setProperty('--opacity', opacity);
+        heart.style.setProperty('--delay', `${delay}s`);
+        heart.style.setProperty('--direction', direction);
+        heart.style.setProperty('--easing', 'cubic-bezier(0.34, 1.56, 0.64, 1)');
+        
+        container.appendChild(heart);
+      }
+    }
+
+    // 性能优化相关 - requestAnimationFrame 兼容性处理
+    if (!window.requestAnimationFrame) {
+      window.requestAnimationFrame = function (callback, element) {
+        let lastTime = 0;
+        const currTime = new Date().getTime();
+        const timeToCall = Math.max(0, 16 - (currTime - lastTime));
+        const id = window.setTimeout(function () {
+          callback(currTime + timeToCall);
+        }, timeToCall);
+        lastTime = currTime + timeToCall;
+        return id;
+      };
+    }
+
+    // 页面隐藏时停止动画，提升性能
+    let hiddenProperty = 'hidden' in document ? 'hidden' : 
+      'webkitHidden' in document ? 'webkitHidden' :
+      'mozHidden' in document ? 'mozHidden' :
+      null;
+    let visibilityChangeEvent = hiddenProperty.replace(/hidden/i, 'visibilitychange');
+
+    document.addEventListener(visibilityChangeEvent, function() {
+      if (!document[hiddenProperty]) {
+        // 页面可见时，重新启动动画
+        if (typeof fireworkSystem !== 'undefined') {
+          fireworkSystem.startLaunch();
+        }
+      }
+    });
+
+    // 优化事件监听器
+    function debounce(func, wait) {
+      let timeout;
+      return function() {
+        const context = this, args = arguments;
+        const later = function() {
+          timeout = null;
+          func.apply(context, args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+      };
+    }
+
+    // 窗口调整大小时重新计算星星背景
+    window.addEventListener('resize', debounce(function() {
+      const container = document.getElementById('stars-container');
+      while (container.firstChild) {
+        container.removeChild(container.firstChild);
+      }
+      createStarsBackground();
+    }, 100));
+
+    // 初始化变量
+    let fireworkSystem;
+
+    // 修改初始化函数，存储fireworkSystem实例
+    function init() {
+      // 初始化背景音乐
+      if (typeof initMusic === 'function') {
+        initMusic();
+      }
+      // 创建装饰效果
+      createStartDecor();
+      // 初始化烟花系统
+      fireworkSystem = new FireworkSystem();
+    }
+    
+    function createSweetBg() {
+      const bgBox = document.getElementById('bg-decor');
+      const isMobile = window.innerWidth < 768;
+      
+      // 根据设备性能调整元素数量
+      let heartCount = isMobile ? 12 : 20;
+      let starCount = isMobile ? 18 : 30;
+      let bubbleCount = isMobile ? 8 : 15;
+      
+      if (isLowEndDevice) {
+        heartCount = isMobile ? 6 : 10;
+        starCount = isMobile ? 9 : 15;
+        bubbleCount = isMobile ? 4 : 8;
+      }
+      
+      for (let i = 0; i < heartCount; i++) {
+        const heart = document.createElement('i');
+        heart.className = 'fa fa-heart bg-heart';
+        heart.style.left = `${Math.random() * 100}%`;
+        heart.style.animationDelay = `${Math.random() * 6}s`;
+        bgBox.appendChild(heart);
+      }
+      
+      // 移除黑色五角星背景
+      // 这部分代码已经被注释掉，不再创建黑色五角星
+      
+      for (let i = 0; i < bubbleCount; i++) {
+        const bubble = document.createElement('div');
+        bubble.className = 'bg-bubble';
+        const size = isMobile ? Math.random() * 25 + 15 : Math.random() * 40 + 20;
+        bubble.style.width = `${size}px`;
+        bubble.style.height = `${size}px`;
+        bubble.style.left = `${Math.random() * 100}%`;
+        bubble.style.animationDelay = `${Math.random() * 8}s`;
+        bgBox.appendChild(bubble);
+      }
+    }
+    
+    // 核心：启动弹幕循环生成（不断放入）
+    function startLoopDanmus() {
+      const danmuBox = document.getElementById('danmu-container');
+      const isMobile = window.innerWidth < 768;
+      // 根据设备性能调整弹幕数量和速度
+      let batchSize = isMobile ? 8 : 12; // 每批生成数量：手机8个，桌面12个
+      let loopTime = 2000; // 每2秒生成一批（可调整速度）
+      
+      if (isLowEndDevice) {
+        batchSize = isMobile ? 4 : 6; // 低端设备减少弹幕数量
+        loopTime = 3000; // 低端设备降低弹幕生成速度
+      }
+      
+      // 先清除旧定时器，避免重复
+      if (danmuTimer) clearInterval(danmuTimer);
+      
+      // 循环生成函数
+      function generateBatch() {
+        for (let i = 0; i < batchSize; i++) {
+          const danmu = document.createElement('div');
+          danmu.className = 'danmu';
+          
+          const text = texts[Math.floor(Math.random() * texts.length)];
+          
+          const isMobile = window.innerWidth < 768;
+          
+          // 调整弹幕整体靠左显示，左侧不留空间
+          let left, top;
+          if (isMobile) {
+            // 移动设备上从左侧开始，留出右侧适当空间
+            left = 0 + Math.random() * 65; // 0% ≤ 左边位置 ≤ 65%
+          } else {
+            // 桌面设备同样从左侧开始
+            left = 0 + Math.random() * 75; // 0% ≤ 左边位置 ≤ 75%
+          }
+          // 垂直方向保持使用整个屏幕高度
+          top = Math.random() * 95;
+          
+          const delay = Math.random() * 0.8; // 每批内弹幕延迟弹出，更自然
+          
+          danmu.style.left = `${left}%`;
+          danmu.style.top = `${top}%`;
+          danmu.style.animationDelay = `${delay}s`;
+          
+          // 创建卡片内部结构
+          danmu.innerHTML = `
+            <div class="danmu-header">
+              <span class="danmu-dot"></span>
+              <span class="danmu-dot"></span>
+              <span class="danmu-dot"></span>
+              <span class="danmu-title">温馨提示</span>
+              <span class="danmu-dot"></span>
+              <span class="danmu-dot"></span>
+              <span class="danmu-dot"></span>
+            </div>
+            <div class="danmu-content">${text}</div>
+          `;
+          
+          // 针对移动设备的特殊样式调整
+          if (isMobile) {
+            // 移动设备上减小最小宽度，增加最大宽度限制
+            danmu.style.minWidth = '140px';
+            danmu.style.maxWidth = '70%';
+            // 确保文本内容居中且不会溢出
+            danmu.querySelector('.danmu-content').style.fontSize = 'clamp(0.75rem, 2.5vw, 0.9rem)';
+          }
+          
+          // 移除特殊处理，所有弹幕保持一致大小
+          // 这样可以确保所有弹幕都能正常显示，不会有特别大的弹幕遮挡其他内容
+          
+          danmuBox.appendChild(danmu);
+          
+          // 自动清除旧弹幕：10秒后消失（避免堆积卡顿）
+          setTimeout(() => {
+            // 消失动画：渐变透明+缩小
+            danmu.style.transition = 'opacity 0.5s, transform 0.5s';
+            danmu.style.opacity = 0;
+            danmu.style.transform = 'scale(0.8)';
+            // 完全透明后移除元素
+            setTimeout(() => danmu.remove(), 500);
+          }, 10000);
+        }
+      }
+      
+      // 立即生成第一批，然后每loopTime毫秒生成一批
+      generateBatch();
+      danmuTimer = setInterval(generateBatch, loopTime);
+    }
+  </script>
+</body>
+</html>
